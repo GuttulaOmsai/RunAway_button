@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+</head>
+<body class="bg-gray-900 text-white flex justify-center items-center mt-48 ">
+    <div class="container mx-auto">
+        <h1 class="text-center text-3xl font-bold my-8">Login</h1>
+        <form id="loginForm" class="max-w-md mx-auto">
+            <input type="text" id="email" name="email" placeholder="Email" class="w-full px-4 py-2 mb-4 border border-gray-300 rounded text-gray-800">
+            <br>
+            <input type="password" id="password" placeholder="Enter Password" class="w-full px-4 py-2 mb-4 border border-gray-300 rounded text-gray-800">
+            <input type="checkbox" id="showpassword" class="mr-2">
+            <label for="showpassword">Show Password</label>
+            <div id="password-length-msg" class="text-red-500 hidden">Password must be at least 8 characters long.</div>
+            <div id="runaway-container" class="flex justify-center">
+                <input type="submit" id="runaway" value="Login" class="w-28 bg-green-500 text-white px-4 py-2 rounded cursor-pointer transition duration-500 transform hover:bg-green-600">
+                <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+            </div>
+        </form>
+    </div>
+    <script >
+        var stupidButton = {
+            init: function () {
+                this.attachEvents();
+            },
+        
+            attachEvents: function () {
+                $('#runaway-container').hover(this.flyAway.bind(this));
+                $('#runaway').on('click', this.showWin.bind(this));
+                $('#password').on('input', this.checkPasswordLength.bind(this));
+                $('#showPassword').change(this.togglePasswordVisibility.bind(this));
+            },
+        
+            flyAway: function (e) {
+                var email = $('#email').val();
+                var password = $('#password').val();
+                if (email === '' || password === '' || password.length < 8) {
+                    var mLeft = Math.random() * 300;
+                    var mTop = Math.random() * 300;
+        
+                    $('#runaway-container').css('margin-left', mLeft);
+                    $('#runaway-container').css('margin-top', mTop);
+                }
+            },
+        
+            showWin: function (e) {
+                e.preventDefault();
+                var email = $('#email').val();
+                var password = $('#password').val();
+                if (email === '' || password === '') {
+                    alert('Please fill in all fields.');
+                } else if (password.length < 8) {
+                    alert('Password must be at least 8 characters long.');
+                } else {
+                    alert('Nice! Here, have a cookie!');
+                    $('#runaway-container').css('margin-left', 'auto');
+                    $('#runaway-container').css('margin-top', '100px');
+                    $('#runaway-container').off('hover');
+                }
+            },
+        
+            checkPasswordLength: function () {
+                var password = $('#password').val();
+                if (password.length < 8) {
+                    $('#password-length-msg').show();
+                } else {
+                    $('#password-length-msg').hide();
+                }
+            },
+        
+            togglePasswordVisibility: function () {
+                var passwordInput = $('#password');
+                var showPasswordCheckbox = $('#showPassword');
+                if (showPasswordCheckbox.prop('checked')) {
+                    passwordInput.attr('type', 'text');
+                } else {
+                    passwordInput.attr('type', 'password');
+                }
+            }
+        };
+        const password = document.getElementById('password');
+        const showpassword = document.getElementById('showpassword');
+        
+        showpassword.addEventListener('change', function() {
+            if (this.checked) {
+                password.type = 'text';
+            } else {
+                password.type = 'password';
+            }
+        });
+        
+        stupidButton.init();
+    </script>
+</body>
+</html>
